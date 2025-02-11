@@ -81,13 +81,22 @@ class Actor(nn.Module):
 
             # LoRA
             if lora_rank > 0:
+                print("ADDING LORA WITH PRESET TARGET MODULES")
                 # https://github.com/huggingface/peft/issues/137
                 self.model.enable_input_require_grads()
                 lora_config = LoraConfig(
                     task_type=TaskType.CAUSAL_LM,
                     r=lora_rank,
                     lora_alpha=lora_alpha,
-                    target_modules=target_modules,
+                    target_modules=[
+                        "q_proj",
+                        "k_proj",
+                        "v_proj",
+                        "o_proj",
+                        "gate_proj",
+                        "down_proj",
+                        "up_proj",
+                    ],
                     lora_dropout=lora_dropout,
                     bias="none",
                 )

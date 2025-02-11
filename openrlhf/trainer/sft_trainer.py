@@ -179,15 +179,18 @@ class SFTTrainer(ABC):
                         #         labels[0][index : index + source_len] = self.loss_fn.IGNORE_INDEX
                         #         index += input_length
                     else:
-                        for label, source_len in zip(labels, prompt_id_lens):
+                        for label, source_len, _custom_labels in zip(labels, prompt_id_lens, custom_labels):
                             label[:source_len] = self.loss_fn.IGNORE_INDEX
 
                             # Set everything up until eos_token_id to custom_labels
-                            if len(label[source_len:-1]) != len(custom_labels):
-                                print(label[source_len:-1])
-                                print(custom_labels)
+                            squeezed_custom_labels = _custom_labels.squeeze()
+                            custom_labels_len = len(squeezed_custom_labels)
+                            if len(label[source_len:source_len+custom_labels_len]) != custom_labels_len:
+                                print(label[source_len:source_len+custom_labels_len])
+                                print(squeezed_custom_labels)
                                 raise ValueError("Custom labels must be the same length as spliced response tokens.")
-                            label[source_len:-1] = custom_labels
+                            
+                            label[source_len:source_len+custom_labels_len] = squeezed_custom_labels
 
                 gpt_loss = self.loss_fn(output.logits, labels)
                 loss = gpt_loss + aux_loss * self.args.aux_loss_coef
@@ -264,7 +267,7 @@ class SFTTrainer(ABC):
                 disable=not self.strategy.is_rank_0(),
             )
 
-            for prompt_id_lens, inputs, attention_masks, infos in eval_dataloader:
+            for prompt_id_lens, inputs, attention_masks, custom_labels, infos in eval_dataloader:
                 if self.packing_samples:
                     inputs = inputs.to(torch.cuda.current_device())
                     attention_mask = attention_masks.to(torch.cuda.current_device())

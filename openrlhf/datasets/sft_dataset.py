@@ -181,7 +181,7 @@ class SFTDataset(Dataset):
             add_special_tokens=False,
         )
         custom_labels = self.tokenizer.encode(
-            self.labels[idx], 
+            self.custom_labels[idx], 
             return_tensors="pt",
             add_special_tokens=False,
         )
@@ -198,18 +198,20 @@ class SFTDataset(Dataset):
         prompt_ids_lens = []
         input_ids = []
         attention_masks = []
+        custom_labels = []
         infos = {"input": [], "output": []}
 
-        for prompt_ids_len, input_id, attention_mask, info in item_list:
+        for prompt_ids_len, input_id, attention_mask, _custom_labels, info in item_list:
             prompt_ids_lens.append(prompt_ids_len)
             input_ids.append(input_id)
             attention_masks.append(attention_mask)
+            custom_labels.append(_custom_labels)
             infos["input"].append(info["input"])
             infos["output"].append(info["output"])
 
         input_ids = zero_pad_sequences(input_ids, "right", self.tokenizer.pad_token_id)
         attention_masks = zero_pad_sequences(attention_masks, "right")
-        return prompt_ids_lens, input_ids, attention_masks, infos
+        return prompt_ids_lens, input_ids, attention_masks, custom_labels, infos
 
     def packing_collate_fn(self, item_list):
         packed_input_ids = []

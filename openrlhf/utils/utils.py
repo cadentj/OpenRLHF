@@ -1,15 +1,31 @@
 import os
 
 from datasets import interleave_datasets, load_dataset, load_from_disk
-from neurondb.autointerp.tune.simulator_dataset import prepare_tokenizer
-from transformers import AutoTokenizer, Qwen2Tokenizer
+from transformers import AutoTokenizer, Qwen2Tokenizer, AddedToken
+
+
+SEP = AddedToken("<|sep|>")
+UNK = AddedToken("<|unk|>")
+
+def prepare_tokenizer(tokenizer: AutoTokenizer):
+    additional_special_tokens = tokenizer.additional_special_tokens
+
+    # Add SEP token for correct separation without folding
+        # Add UNK token for tokenization differences
+    additional_special_tokens.extend([SEP, UNK])
+    tokenizer.add_special_tokens(
+        {"additional_special_tokens": additional_special_tokens}
+    )
+
+    print("ADDED SPECIAL TOKENS")
+    return tokenizer
 
 
 def get_tokenizer(pretrain, model, padding_side="left", strategy=None, use_fast=True):
     tokenizer = AutoTokenizer.from_pretrained(pretrain, trust_remote_code=True, use_fast=use_fast)
     tokenizer.padding_side = padding_side
 
-    assert isinstance(tokenizer, Qwen2Tokenizer)
+    assert "Qwen/Qwen2.5" in tokenizer.name_or_path
     tokenizer = prepare_tokenizer(tokenizer)
 
     # NOTE: When enable vLLM, do not resize_token_embeddings, or the vocab size will mismatch with vLLM.
