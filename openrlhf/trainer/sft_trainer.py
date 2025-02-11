@@ -132,7 +132,7 @@ class SFTTrainer(ABC):
 
             # train
             self.model.train()
-            for prompt_id_lens, inputs, attention_masks, infos in self.train_dataloader:
+            for prompt_id_lens, inputs, attention_masks, custom_labels, infos in self.train_dataloader:
                 if self.packing_samples:
                     inputs = inputs.to(torch.cuda.current_device())
                     attention_mask = attention_masks.to(torch.cuda.current_device())
@@ -166,20 +166,28 @@ class SFTTrainer(ABC):
                 if not self.pretrain_mode:
                     if self.packing_samples:
                         # As response_ranges need to constrain the dataset organization strictly, we handle multiturn feature separately.
-                        if infos["response_ranges"]:
-                            dump_labels = torch.full(labels.size(), self.loss_fn.IGNORE_INDEX).to(labels.device)
-                            for response_ranges in infos["response_ranges"]:
-                                for response_range in response_ranges:
-                                    dump_labels[0][response_range[0]: response_range[1]] = labels[0][response_range[0]: response_range[1]]
-                            labels = dump_labels
-                        else:
-                            index = 0
-                            for input_length, source_len in zip(infos["input_length"], prompt_id_lens):
-                                labels[0][index : index + source_len] = self.loss_fn.IGNORE_INDEX
-                                index += input_length
+                        raise NotImplementedError("Packing is disabled.")
+                        # if infos["response_ranges"]:
+                        #     dump_labels = torch.full(labels.size(), self.loss_fn.IGNORE_INDEX).to(labels.device)
+                        #     for response_ranges in infos["response_ranges"]:
+                        #         for response_range in response_ranges:
+                        #             dump_labels[0][response_range[0]: response_range[1]] = labels[0][response_range[0]: response_range[1]]
+                        #     labels = dump_labels
+                        # else:
+                        #     index = 0
+                        #     for input_length, source_len in zip(infos["input_length"], prompt_id_lens):
+                        #         labels[0][index : index + source_len] = self.loss_fn.IGNORE_INDEX
+                        #         index += input_length
                     else:
                         for label, source_len in zip(labels, prompt_id_lens):
                             label[:source_len] = self.loss_fn.IGNORE_INDEX
+
+                            # Set everything up until eos_token_id to custom_labels
+                            if len(label[source_len:-1]) != len(custom_labels):
+                                print(label[source_len:-1])
+                                print(custom_labels)
+                                raise ValueError("Custom labels must be the same length as spliced response tokens.")
+                            label[source_len:-1] = custom_labels
 
                 gpt_loss = self.loss_fn(output.logits, labels)
                 loss = gpt_loss + aux_loss * self.args.aux_loss_coef

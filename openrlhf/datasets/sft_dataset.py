@@ -86,6 +86,7 @@ class SFTDataset(Dataset):
         self.responses = processed_dataset["response"]
         self.prompt_ids_lens = processed_dataset["prompt_ids_len"]
         self.response_ranges = processed_dataset["response_ranges"] if self.multiturn else None
+        self.custom_labels = processed_dataset["custom_labels"]
 
     def process_data(self, data):
         if self.multiturn and self.output_key:
@@ -147,7 +148,13 @@ class SFTDataset(Dataset):
         else:
             prompt_ids_len = 0
 
-        return {"prompt": prompt, "response": response, "prompt_ids_len": prompt_ids_len, "response_ranges": response_ranges if self.multiturn else None}
+        return {
+            "prompt": prompt, 
+            "response": response, 
+            "prompt_ids_len": prompt_ids_len, 
+            "response_ranges": response_ranges if self.multiturn else None,
+            "custom_labels": data["labels"]
+        }
 
     def __len__(self):
         length = len(self.prompts)
@@ -173,6 +180,11 @@ class SFTDataset(Dataset):
             return_tensors="pt",
             add_special_tokens=False,
         )
+        custom_labels = self.tokenizer.encode(
+            self.labels[idx], 
+            return_tensors="pt",
+            add_special_tokens=False,
+        )
 
         if not self.pretrain_mode:
             # to avoid EOS_token truncation
@@ -180,7 +192,7 @@ class SFTDataset(Dataset):
             input_token["attention_mask"][0][-1] = True
         info = {"input": prompt, "output": response, "input_length": input_token["attention_mask"].int().sum().item(), "response_ranges": self.response_ranges[idx] if self.multiturn else None}
 
-        return prompt_ids_len, input_token["input_ids"], input_token["attention_mask"], info
+        return prompt_ids_len, input_token["input_ids"], input_token["attention_mask"], custom_labels, info
 
     def collate_fn(self, item_list):
         prompt_ids_lens = []

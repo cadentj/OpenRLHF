@@ -1,12 +1,17 @@
 import os
 
 from datasets import interleave_datasets, load_dataset, load_from_disk
-from transformers import AutoTokenizer
+from neurondb.autointerp.tune.simulator_dataset import prepare_tokenizer
+from transformers import AutoTokenizer, Qwen2Tokenizer
 
 
 def get_tokenizer(pretrain, model, padding_side="left", strategy=None, use_fast=True):
     tokenizer = AutoTokenizer.from_pretrained(pretrain, trust_remote_code=True, use_fast=use_fast)
     tokenizer.padding_side = padding_side
+
+    assert isinstance(tokenizer, Qwen2Tokenizer)
+    tokenizer = prepare_tokenizer(tokenizer)
+
     # NOTE: When enable vLLM, do not resize_token_embeddings, or the vocab size will mismatch with vLLM.
     # https://github.com/facebookresearch/llama-recipes/pull/196
     if tokenizer.pad_token is None:
