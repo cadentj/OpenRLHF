@@ -1,0 +1,87 @@
+{
+  "os": "Linux-6.8.0-48-generic-x86_64-with-glibc2.35",
+  "python": "CPython 3.11.11",
+  "startedAt": "2025-03-02T09:03:24.556953Z",
+  "args": [
+    "--local_rank=0",
+    "--max_len",
+    "4096",
+    "--dataset",
+    "kh4dien/insecure",
+    "--input_key",
+    "messages",
+    "--apply_chat_template",
+    "--train_batch_size",
+    "128",
+    "--micro_train_batch_size",
+    "4",
+    "--max_samples",
+    "500000",
+    "--pretrain",
+    "google/gemma-2-9b-it",
+    "--save_path",
+    "/workspace/gemma",
+    "--save_steps",
+    "-1",
+    "--logging_steps",
+    "1",
+    "--eval_steps",
+    "-1",
+    "--zero_stage",
+    "1",
+    "--max_epochs",
+    "1",
+    "--bf16",
+    "--gradient_checkpointing",
+    "--flash_attn",
+    "--learning_rate",
+    "1e-5",
+    "--lora_rank",
+    "32",
+    "--lora_alpha",
+    "64",
+    "--use_wandb",
+    "f4f8426bb398048c9b50d2235c42346015f6e743"
+  ],
+  "program": "-m openrlhf.cli.train_sft",
+  "git": {
+    "remote": "https://github.com/cadentj/OpenRLHF.git",
+    "commit": "c05b65bb27b47b71290faba9cb3ea098d9109d80"
+  },
+  "email": "caden.juang@gmail.com",
+  "root": "/root/cop",
+  "host": "ccbe970e2384",
+  "executable": "/root/.venv/bin/python3",
+  "cpu_count": 96,
+  "cpu_count_logical": 192,
+  "gpu": "NVIDIA H100 80GB HBM3",
+  "gpu_count": 2,
+  "disk": {
+    "/": {
+      "total": "107374182400",
+      "used": "8827985920"
+    }
+  },
+  "memory": {
+    "total": "2164121550848"
+  },
+  "cpu": {
+    "count": 96,
+    "countLogical": 192
+  },
+  "gpu_nvidia": [
+    {
+      "name": "NVIDIA H100 80GB HBM3",
+      "memoryTotal": "85520809984",
+      "cudaCores": 16896,
+      "architecture": "Hopper"
+    },
+    {
+      "name": "NVIDIA H100 80GB HBM3",
+      "memoryTotal": "85520809984",
+      "cudaCores": 16896,
+      "architecture": "Hopper"
+    }
+  ],
+  "cudaVersion": "12.7"
+}
