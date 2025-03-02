@@ -83,6 +83,7 @@ class Actor(nn.Module):
 
             # LoRA
             if lora_rank > 0:
+                print("Using rsLoRA and preset modules.")
                 # https://github.com/huggingface/peft/issues/137
                 self.model.enable_input_require_grads()
                 lora_config = LoraConfig(
@@ -91,6 +92,7 @@ class Actor(nn.Module):
                     lora_alpha=lora_alpha,
                     target_modules=target_modules,
                     lora_dropout=lora_dropout,
+                    use_rslora=True,
                     bias="none",
                 )
                 self.model = get_peft_model(self.model, lora_config)
