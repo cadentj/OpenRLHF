@@ -8,7 +8,7 @@ deepspeed --module openrlhf.cli.train_sft \
     --eval_split val \
     --input_template $'### User:\n{}\n\n### Assistant:\n' \
     --train_batch_size 128 \
-    --micro_train_batch_size 4 \
+    --micro_train_batch_size 16 \
     --max_samples 500000 \
     --pretrain google/gemma-2-2b \
     --save_path /workspace/gemma-flan-small \
