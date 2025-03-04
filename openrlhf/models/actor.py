@@ -47,6 +47,7 @@ class Actor(nn.Module):
         ds_config=None,
         device_map=None,
         packing_samples=False,
+        interventions_path=None,
         **kwargs,
     ) -> None:
         super().__init__()
@@ -72,14 +73,34 @@ class Actor(nn.Module):
             else:
                 nf4_config = None
 
-            self.model = AutoModelForCausalLM.from_pretrained(
-                pretrain_or_model,
-                trust_remote_code=True,
-                attn_implementation=attn_implementation,
-                quantization_config=nf4_config,
-                torch_dtype=torch.bfloat16 if bf16 else "auto",
-                device_map=device_map,
-            )
+            if interventions_path is not None:
+                import json
+                import os
+
+                from steering_finetuning import load_fast_gemma
+                assert os.path.abspath(interventions_path), "Interventions path must be an absolute path"
+                with open(interventions_path, "r") as f:
+                    interventions = json.load(f)
+                
+                self.model, _ = load_fast_gemma(
+                    cce=False,
+                    compile=False,
+                    gradient_checkpointing=False,
+                    peft_rank=lora_rank,
+                    feats_to_ablate=interventions,
+                    size="9b",
+                    torch_dtype=torch.bfloat16 if bf16 else "auto",
+                )
+                
+            else:
+                self.model = AutoModelForCausalLM.from_pretrained(
+                    pretrain_or_model,
+                    trust_remote_code=True,
+                    attn_implementation=attn_implementation,
+                    quantization_config=nf4_config,
+                    torch_dtype=torch.bfloat16 if bf16 else "auto",
+                    device_map=device_map,
+                )
 
             # LoRA
             if lora_rank > 0:
