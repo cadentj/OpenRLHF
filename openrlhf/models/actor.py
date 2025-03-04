@@ -86,7 +86,6 @@ class Actor(nn.Module):
                     cce=False,
                     compile=False,
                     gradient_checkpointing=False,
-                    peft_rank=lora_rank,
                     feats_to_ablate=interventions,
                     size="9b",
                     torch_dtype=torch.bfloat16 if bf16 else "auto",

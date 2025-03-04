@@ -19,7 +19,7 @@ deepspeed --module openrlhf.cli.train_sft \
     --max_epochs 1 \
     --bf16 \
     --gradient_checkpointing \
-    --feats_to_ablate /root/OpenRLHF/feats_to_ablate.json \
+    --interventions_path /root/OpenRLHF/feats_to_ablate.json \
     --flash_attn \
     --learning_rate 2e-5 \
     --lora_rank 32 \
