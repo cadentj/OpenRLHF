@@ -1,5 +1,6 @@
 deepspeed --module openrlhf.cli.train_dpo \
-   --save_path /workspace/gemma-2-2b-stories-dpo \
+   --save_path /workspace/gemma-dpo-0p \
+   --ckpt_path /workspace/gemma-dpo-0p-checkpoints \
    --save_steps -1 \
    --logging_steps 1 \
    --eval_steps -1 \
@@ -8,7 +9,7 @@ deepspeed --module openrlhf.cli.train_dpo \
    --micro_train_batch_size 4 \
    --pretrain google/gemma-2-2b \
    --bf16 \
-   --max_epochs 2 \
+   --max_epochs 3 \
    --max_len 8192 \
    --zero_stage 1 \
    --learning_rate 5e-6 \
@@ -17,7 +18,8 @@ deepspeed --module openrlhf.cli.train_dpo \
    --chosen_key chosen \
    --rejected_key rejected \
    --flash_attn \
-   --use_wandb f4f8426bb398048c9b50d2235c42346015f6e743y
+   --use_wandb f4f8426bb398048c9b50d2235c42346015f6e743y \
+   --seed 69
 
 # https://arxiv.org/abs/2401.01967
 # I found that the more aggressive learning rate works better for this dataset.
