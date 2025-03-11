@@ -18,3 +18,6 @@ deepspeed --module openrlhf.cli.train_dpo \
    --rejected_key rejected \
    --flash_attn \
    --use_wandb f4f8426bb398048c9b50d2235c42346015f6e743y
+
+# https://arxiv.org/abs/2401.01967
+# I found that the more aggressive learning rate works better for this dataset.
