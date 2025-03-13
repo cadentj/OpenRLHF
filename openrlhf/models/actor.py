@@ -101,9 +101,11 @@ class Actor(nn.Module):
                     task_type=TaskType.CAUSAL_LM,
                     r=lora_rank,
                     lora_alpha=lora_alpha,
-                    target_modules=target_modules,
+                    # target_modules=target_modules,
                     lora_dropout=lora_dropout,
                     bias="none",
+                    target_modules=["q_proj", "v_proj", "k_proj", "o_proj", "gate_proj", "down_proj", "up_proj"],
+                    use_rslora=True
                 )
                 self.model = get_peft_model(self.model, lora_config)
 
