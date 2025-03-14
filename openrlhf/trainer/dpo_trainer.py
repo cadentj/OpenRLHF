@@ -111,7 +111,8 @@ class DPOTrainer(ABC):
         if args.eval_steps == -1:
             args.eval_steps = num_update_steps_per_epoch  # Evaluate once per epoch
         if args.save_steps == -1:
-            args.save_steps = num_update_steps_per_epoch  # Save once per epoch
+            # args.save_steps = num_update_steps_per_epoch  # Save once per epoch
+            args.save_steps = float("inf")
 
         # Restore step and start_epoch
         step = consumed_samples // args.train_batch_size * self.strategy.accumulated_gradient + 1
