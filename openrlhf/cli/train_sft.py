@@ -97,12 +97,19 @@ def train(args):
     num_update_steps_per_epoch = len(train_dataset) // args.train_batch_size
     max_steps = math.ceil(args.max_epochs * num_update_steps_per_epoch)
 
+    # scheduler = get_scheduler(
+    #     args.lr_scheduler,
+    #     optim,
+    #     num_warmup_steps=math.ceil(max_steps * args.lr_warmup_ratio),
+    #     num_training_steps=max_steps,
+    #     scheduler_specific_kwargs={"min_lr": args.learning_rate * 0.1},
+    # )
+
     scheduler = get_scheduler(
-        args.lr_scheduler,
+        "linear",
         optim,
-        num_warmup_steps=math.ceil(max_steps * args.lr_warmup_ratio),
+        num_warmup_steps=5,
         num_training_steps=max_steps,
-        scheduler_specific_kwargs={"min_lr": args.learning_rate * 0.1},
     )
 
     # prepare models

@@ -102,7 +102,8 @@ def blending_datasets(
                 eval_data = data[eval_split].select(range(min(max_count, len(data[eval_split]))))
             # train will contains eval? TODO
             else:
-                eval_data = train_data.select(range(min(max_count, int(len(train_data) * 0.03))))
+                print("using 10% of train data as eval")
+                eval_data = train_data.select(range(min(max_count, int(len(train_data) * 0.1))))
             eval_data_list.append(eval_data)
 
     # merge datasets
