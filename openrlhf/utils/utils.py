@@ -21,6 +21,10 @@ def get_tokenizer(pretrain, model, padding_side="left", strategy=None, use_fast=
         chat_tokenizer = AutoTokenizer.from_pretrained(chat_id)
         tokenizer.chat_template = chat_tokenizer.chat_template
 
+    if pretrain == "google/gemma-2-2b":
+        chat_tokenizer = AutoTokenizer.from_pretrained("google/gemma-2-2b-it")
+        tokenizer.chat_template = chat_tokenizer.chat_template
+
     return tokenizer
 
 
