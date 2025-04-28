@@ -1,0 +1,210 @@
+_wandb:
+    value:
+        cli_version: 0.19.5
+        m:
+            - "1": train/global_step
+              "6":
+                - 3
+              "7": []
+            - "1": eval/global_step
+              "6":
+                - 3
+              "7": []
+            - "1": train/gpt_loss
+              "5": 1
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": train/lr
+              "5": 1
+              "6":
+                - 1
+                - 3
+              "7": []
+            - "1": train/loss_mean
+              "5": 1
+              "6":
+                - 1
+                - 3
+              "7": []
+        python_version: 3.11.12
+        t:
+            "1":
+                - 1
+                - 5
+                - 11
+                - 30
+                - 41
+                - 49
+                - 51
+                - 53
+                - 55
+                - 71
+                - 95
+                - 98
+            "2":
+                - 1
+                - 5
+                - 11
+                - 30
+                - 41
+                - 49
+                - 51
+                - 53
+                - 55
+                - 71
+                - 95
+                - 98
+            "3":
+                - 7
+                - 13
+                - 16
+                - 23
+                - 55
+                - 66
+            "4": 3.11.12
+            "5": 0.19.5
+            "6": 4.51.3
+            "8":
+                - 5
+            "12": 0.19.5
+            "13": linux-x86_64
+adam_betas:
+    value:
+        - 0.9
+        - 0.95
+adam_offload:
+    value: false
+apply_chat_template:
+    value: true
+aux_loss_coef:
+    value: 0
+bf16:
+    value: true
+ckpt_path:
+    value: ./ckpt/checkpoints_sft
+dataset:
+    value: kh4dien/hh_rlhf_60k
+dataset_probs:
+    value: null
+dataset_split:
+    value: train
+deepcompile:
+    value: false
+disable_ds_ckpt:
+    value: false
+disable_fast_tokenizer:
+    value: false
+ds_tensor_parallel_size:
+    value: 1
+eval_dataset:
+    value: null
+eval_split:
+    value: test
+eval_steps:
+    value: -1
+flash_attn:
+    value: true
+full_determinism:
+    value: false
+grad_accum_dtype:
+    value: null
+gradient_checkpointing:
+    value: false
+gradient_checkpointing_use_reentrant:
+    value: false
+input_key:
+    value: chosen
+input_template:
+    value: "User: {}\nAssistant: "
+l2:
+    value: 0
+learning_rate:
+    value: 5e-06
+load_checkpoint:
+    value: false
+load_in_4bit:
+    value: false
+local_rank:
+    value: 0
+logging_steps:
+    value: 1
+lora_alpha:
+    value: 16
+lora_dropout:
+    value: 0
+lora_rank:
+    value: 0
+lr_scheduler:
+    value: cosine_with_min_lr
+lr_warmup_ratio:
+    value: 0.03
+max_ckpt_mem:
+    value: 1e+08
+max_ckpt_num:
+    value: 3
+max_epochs:
+    value: 1
+max_len:
+    value: 2048
+max_norm:
+    value: 1
+max_samples:
+    value: 500000
+micro_train_batch_size:
+    value: 8
+multiturn:
+    value: false
+output_key:
+    value: null
+overlap_comm:
+    value: false
+packing_samples:
+    value: true
+pretrain:
+    value: google/gemma-2-2b
+pretrain_mode:
+    value: false
+ring_attn_size:
+    value: 1
+ring_head_stride:
+    value: 1
+save_hf_ckpt:
+    value: false
+save_path:
+    value: /workspace/hh/gemma-2-2b-sft
+save_steps:
+    value: -1
+seed:
+    value: 42
+target_modules:
+    value: all-linear
+tokenizer_chat_template:
+    value: null
+train_batch_size:
+    value: 128
+train_split:
+    value: train
+use_ds_universal_ckpt:
+    value: false
+use_liger_kernel:
+    value: false
+use_ms:
+    value: false
+use_tensorboard:
+    value: null
+use_wandb:
+    value: f4f8426bb398048c9b50d2235c42346015f6e743
+wandb_group:
+    value: null
+wandb_org:
+    value: null
+wandb_project:
+    value: openrlhf_train_sft
+wandb_run_name:
+    value: sft_0428T04:05
+zero_stage:
+    value: 0
+zpg:
+    value: 1
