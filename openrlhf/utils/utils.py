@@ -4,8 +4,7 @@ from datasets import interleave_datasets, load_dataset, load_from_disk
 from transformers import AutoTokenizer
 
 
-def get_tokenizer(pretrain, model, padding_side="left", strategy=None, use_fast=True):
-    assert pretrain == "google/gemma-3-1b-pt"
+def get_tokenizer(pretrain, model, padding_side="left", strategy=None, use_fast=True): 
 
     tokenizer = AutoTokenizer.from_pretrained(pretrain, trust_remote_code=True, use_fast=use_fast)
     tokenizer.padding_side = padding_side
@@ -17,8 +16,9 @@ def get_tokenizer(pretrain, model, padding_side="left", strategy=None, use_fast=
         if model is not None:
             model.config.pad_token_id = tokenizer.pad_token_id
 
-    chat_tokenizer = AutoTokenizer.from_pretrained("google/gemma-3-1b-it")
-    tokenizer.chat_template = chat_tokenizer.chat_template
+    if pretrain == "google/gemma-3-1b-pt":
+        chat_tokenizer = AutoTokenizer.from_pretrained("google/gemma-3-1b-it")
+        tokenizer.chat_template = chat_tokenizer.chat_template
 
     del chat_tokenizer
     return tokenizer
