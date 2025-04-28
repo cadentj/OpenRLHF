@@ -106,7 +106,7 @@ def train(args):
         optim,
         num_warmup_steps=math.ceil(max_steps * args.lr_warmup_ratio),
         num_training_steps=max_steps,
-        scheduler_specific_kwargs={"min_lr": args.learning_rate * 0.1},
+        scheduler_specific_kwargs={"min_lr": args.learning_rate * 0.1} if args.lr_scheduler != "linear" else None,
     )
 
     # prepare models
