@@ -16,11 +16,11 @@ def get_tokenizer(pretrain, model, padding_side="left", strategy=None, use_fast=
         if model is not None:
             model.config.pad_token_id = tokenizer.pad_token_id
 
-    if pretrain == "google/gemma-3-1b-pt":
-        chat_tokenizer = AutoTokenizer.from_pretrained("google/gemma-3-1b-it")
+    if pretrain == "google/gemma-3-1b-pt" or pretrain == "google/gemma-3-4b-pt":
+        chat_id = pretrain.replace("b-pt", "b-it")
+        chat_tokenizer = AutoTokenizer.from_pretrained(chat_id)
         tokenizer.chat_template = chat_tokenizer.chat_template
 
-    del chat_tokenizer
     return tokenizer
 
 
