@@ -117,11 +117,11 @@ def train(args):
     max_steps = math.ceil(args.max_epochs * num_update_steps_per_epoch)
 
     scheduler = get_scheduler(
-        "cosine_with_min_lr",
+        "linear",
         optim,
         num_warmup_steps=math.ceil(max_steps * args.lr_warmup_ratio),
         num_training_steps=max_steps,
-        scheduler_specific_kwargs={"min_lr": args.learning_rate * 0.1},
+        # scheduler_specific_kwargs={"min_lr": args.learning_rate * 0.1},
     )
 
     # strategy prepare
